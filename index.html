@@ -108,6 +108,7 @@
         })
           .then((r) => r.json())
           .then((data) => {
+          document.querySelector(".preload").style.display = "visible";
             updateUI(data);
           });
       }
