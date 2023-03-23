@@ -56,39 +56,3 @@
 </body>
 
 </html>
-=======
-            //console.log(Math.floor(Math.random() * arr.length))
-          }, interval);
-        };
-
-        const init = () => {
-          loadEmojis(emojis);
-        };
-
-        init();
-      }
-
-      function getJoke() {
-        loader();
-        JokeAPI.getJokes({
-          jokeType: "single",
-        //   category: "Misc",
-        })
-          .then((r) => r.json())
-          .then((data) => {
-          document.querySelector(".preload").style.display = "visible";
-            updateUI(data);
-          });
-      }
-      // To update the joke on the UI
-      function updateUI(jokeData) {
-        const $ = (id) => document.getElementById(id);
-
-        $("joke--text").innerHTML = jokeData.joke;
-        document.querySelector(".preload").style.display = "none";
-      }
-      //   console.log(Object.values(JokeAPI));
-    </script>
-  </body>
-</html>
->>>>>>> 594ad3a64324bae366c76f37c2277e7e6b800b2b
