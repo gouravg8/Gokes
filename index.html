@@ -1,124 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Gokes</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
-      crossorigin="anonymous"
-    />
-    <script src="https://unpkg.com/sv443-joke-api@0.0.8/web/index.js"></script>
-    <style>
-      #load {
-        font-size: 50px;
-        position: absolute;
-        top: 40%;
-        left: 40%;
-        z-index: 1;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container my-5" id="joke-container">
-      <div class="shadow-lg border rounded">
-        <h2 class="text-center my-3">Gokes</h2>
-        <h4 id="joke--text" class="py-2 px-3 fw-normal">
-          If you're here for the yodeling lesson, please form an orderly orderly
-          orderly queue.
-        </h4>
-      </div>
-      <div class="preload z-1">
-        <div id="load" class="emoji"></div>
-      </div>
-      <button
-        class="btn btn-lg btn-outline-info float-end fw-semibold my-4"
-        type="submit"
-        onclick="getJoke()"
-      >
-        Get
-      </button>
+
+<head>
+  <meta charset="UTF-8" />
+  <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge" /> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <title>Gokes</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous" />
+  <script src="https://unpkg.com/sv443-joke-api@0.0.8/web/index.js"></script>
+  <link rel="manifest" href="/manifest.json">
+  <!-- <link rel="shortcut icon" type="image/ico" href="./favicon.ico"> -->
+  <link rel="shortcut icon" type="image/x-icon" href="./favicon.png">
+  <style>
+    #load {
+      font-size: 50px;
+      position: absolute;
+      top: 40%;
+      left: 40%;
+      z-index: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container my-5" id="joke-container">
+    <div class="shadow-lg border rounded">
+      <h2 class="text-center my-3">Gokes</h2>
+      <h4 id="joke--text" class="py-2 px-3 fw-normal">
+        If you're here for the yodeling lesson, please form an orderly queue.
+      </h4>
     </div>
+    <div class="preload z-1">
+      <div id="load" class="emoji"></div>
+    </div>
+    <button class="btn btn-lg btn-outline-info float-end fw-semibold my-4" type="submit" onclick="getJoke()">
+      Get
+    </button>
+  </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-      crossorigin="anonymous"
-    ></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+    crossorigin="anonymous"></script>
+  <script src="index.js"></script>
+  <script src="service-worker.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('/service-worker.js');
+      });
+    }
+  </script>
 
-    <script>
-      function loader() {
-        const loader = document.querySelector(".preload");
+</body>
 
-        const emoji = loader.querySelector(".emoji");
-
-        const emojis = [
-          "🕐",
-          "🕐",
-          "🕜",
-          "🕑",
-          "🕝",
-          "🕒",
-          "🕞",
-          "🕓",
-          "🕟",
-          "🕔",
-          "🕠",
-          "🕕",
-          "🕡",
-          "🕖",
-          "🕢",
-          "🕗",
-          "🕣",
-          "🕘",
-          "🕤",
-          "🕙",
-          "🕥",
-          "🕚",
-          "🕦",
-          "🕛",
-          "🕧",
-        ];
-
-        const interval = 125;
-
-        const loadEmojis = (arr) => {
-          setInterval(() => {
-            emoji.innerText = arr[Math.floor(Math.random() * arr.length)];
-
-            //console.log(Math.floor(Math.random() * arr.length))
-          }, interval);
-        };
-
-        const init = () => {
-          loadEmojis(emojis);
-        };
-
-        init();
-      }
-
-      function getJoke() {
-        loader();
-        JokeAPI.getJokes({
-          jokeType: "single",
-        //   category: "Misc",
-        })
-          .then((r) => r.json())
-          .then((data) => {
-            updateUI(data);
-          });
-      }
-      // To update the joke on the UI
-      function updateUI(jokeData) {
-        const $ = (id) => document.getElementById(id);
-
-        $("joke--text").innerHTML = jokeData.joke;
-        document.querySelector(".preload").style.display = "none";
-      }
-      //   console.log(Object.values(JokeAPI));
-    </script>
-  </body>
 </html>
